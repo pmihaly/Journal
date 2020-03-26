@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-const NoteSchema = new mongoose.Schema({
+const EntrySchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, 'Kérlek a bejegyzéshez add meg annak íróját']
+  },
   date: {
     type: Date,
     default: Date.now,
@@ -12,4 +16,4 @@ const NoteSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Note', NoteSchema);
+module.exports = mongoose.model('Entry', EntrySchema);
