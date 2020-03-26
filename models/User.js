@@ -43,7 +43,7 @@ userSchema.pre('save', async function preSaveHook(next) {
   next();
 });
 
-userSchema.methods.generateAuthToken = async () => {
+userSchema.methods.generateAuthToken = async function() {
   const { _id } = this;
   const token = jwt.sign({ __id: _id }, process.env.JWT_KEY);
   this.tokens = [...this.tokens, { token }];

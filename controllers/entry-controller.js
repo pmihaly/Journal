@@ -1,11 +1,12 @@
 const Entry = require('../models/Entry');
 
-// @desc Összes bejegyzések lekérése
+// @desc Bejelentkezett felhasználó összes bejegyzések lekérése
 // @route GET /api/v1/entries/
-// @access Public
+// @access Private
 exports.getEntries = async (req, res) => {
   try {
-    const entrys = await Entry.find();
+    const user = req.user._id;
+    const entrys = await Entry.find({ user });
 
     return res.status(200).json({
       success: true,
@@ -19,9 +20,10 @@ exports.getEntries = async (req, res) => {
 
 // @desc Új bejegyzés hozzáadaása
 // @route POST /api/v1/entries/
-// @access Public
+// @access Private
 exports.addEntry = async (req, res) => {
   try {
+    req.body.user = req.user._id;
     const entry = await Entry.create(req.body);
 
     return res.status(201).json({ success: true, data: entry });
@@ -39,6 +41,7 @@ exports.addEntry = async (req, res) => {
 // @access Public
 exports.updateEntry = async (req, res) => {
   try {
+    req.body.user = req.user._id;
     const entry = await Entry.findByIdAndUpdate(req.params.id, req.body);
 
     if (!entry) {
@@ -65,7 +68,9 @@ exports.updateEntry = async (req, res) => {
 // @access Public
 exports.deleteEntry = async (req, res) => {
   try {
-    const entry = await Entry.findByIdAndDelete(req.params.id);
+    const user = req.user._id;
+    const { id } = req.params;
+    const entry = await Entry.deleteOne({ id, user });
 
     if (!entry) {
       return res.status(404).json({

@@ -35,6 +35,7 @@ exports.loginUser = async (req, res) => {
 
     return res.json({ success: true, data: { user, token } });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ success: false, error });
   }
 };
