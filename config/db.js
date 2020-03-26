@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const mongooseRedisCaching = require('mongoose-redis-caching');
+
+mongooseRedisCaching(mongoose);
 
 const connectDB = async () => {
   try {

@@ -6,7 +6,7 @@ const Entry = require('../models/Entry');
 exports.getEntries = async (req, res) => {
   try {
     const user = req.user._id;
-    const entrys = await Entry.find({ user });
+    const entrys = await Entry.find({ user }).cache();
 
     return res.status(200).json({
       success: true,
@@ -42,7 +42,7 @@ exports.addEntry = async (req, res) => {
 exports.updateEntry = async (req, res) => {
   try {
     req.body.user = req.user._id;
-    const entry = await Entry.findByIdAndUpdate(req.params.id, req.body);
+    const entry = await Entry.findByIdAndUpdate(req.params.id, req.body).cache(10);
 
     if (!entry) {
       return res.status(404).json({
